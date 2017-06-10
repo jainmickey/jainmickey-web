@@ -116,13 +116,17 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ------------------------------------------------------------------------------
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL',
                          default='support@jainmickey.in')
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_PORT = env.int('EMAIL_PORT', default=587)
-EMAIL_SUBJECT_PREFIX = env('EMAIL_SUBJECT_PREFIX', default='[jainmickey] ')
-EMAIL_USE_TLS = True
+# EMAIL_HOST = env('EMAIL_HOST')
+# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+# EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+# EMAIL_SUBJECT_PREFIX = env('EMAIL_SUBJECT_PREFIX', default='[jainmickey] ')
+# EMAIL_USE_TLS = True
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND',
+                    default='django.core.mail.backends.console.EmailBackend')
 
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -133,20 +137,27 @@ DATABASES['default'].update(env.db('DATABASE_URL'))  # Should not override all d
 # CACHING
 # ------------------------------------------------------------------------------
 # Note: Specify different redis database name, if same redis instance is used.
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': env('REDIS_URL', default='redis://localhost:6379/0'),
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#             'PARSER_CLASS': 'redis.connection.HiredisParser',
+#             'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+#             'CONNECTION_POOL_CLASS_KWARGS': {
+#                 # Hobby redistogo on heroku only supports max. 10, increase as required.
+#                 'max_connections': env.int('REDIS_MAX_CONNECTIONS', default=10),
+#                 'timeout': 20,
+#             }
+#         }
+#     }
+# }
+# Using django local cache
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': env('REDIS_URL', default='redis://localhost:6379/0'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'PARSER_CLASS': 'redis.connection.HiredisParser',
-            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
-            'CONNECTION_POOL_CLASS_KWARGS': {
-                # Hobby redistogo on heroku only supports max. 10, increase as required.
-                'max_connections': env.int('REDIS_MAX_CONNECTIONS', default=10),
-                'timeout': 20,
-            }
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': ''
     }
 }
 
