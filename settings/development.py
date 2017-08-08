@@ -83,3 +83,4 @@ API_DEBUG = env.bool('API_DEBUG', default=True)
 # cors
 # --------------------------------------------------------------------------
 CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default=['localhost', 'localhost:8000'])
+CORS_ORIGIN_ALLOW_ALL = True
